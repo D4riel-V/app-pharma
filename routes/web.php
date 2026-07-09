@@ -63,4 +63,156 @@ Route::get('/medicamentos', function () {
     return $tabla;
 });
 
+
+//Ejercicio 1
+Route::get('/clientes/vip', function(){
+    //Creamos la lista de clientes
+    $clientes = [
+        (object) ['id'=> 1, 'nombre' => 'Karen Criollo', 'telefono' => '+503 6769-1673',
+        'puntos_acumulados' => 15],
+        (object) ['id'=> 2, 'nombre' => 'Melissa Ventura', 'telefono' => '+503 0099-1503',
+        'puntos_acumulados' => 5],
+        (object) ['id'=> 3, 'nombre' => 'Carlos Delgado', 'telefono' => '+503 3469-8603',
+        'puntos_acumulados' => 25]
+    ];
+
+    // Creamos la tabla con los registros de los clientes de forma dinamica
+    $html = '
+        <table border = 1 cellspacing = 0>
+            <thead>
+                <tr>
+                    <th>ID CLIENTE</th>
+                    <th>NOMBRE</th>
+                    <th>TELEFONO</th>
+                    <th>PUNTOS ACUMULADOS</th>
+                </tr>
+            </thead>
+            <tbody>
+    ';
+    foreach($clientes as $cliente) {
+        $html .= "
+            <tr>
+                <td>$cliente->id</td>
+                <td>$cliente->nombre</td>
+                <td>$cliente->telefono</td>
+                <td>$cliente->puntos_acumulados</td>
+            </tr>
+        ";
+    }
+    $html .= '
+            </tbody>
+        </table>
+    ';
+
+    //pintamos en la ventana del navegador la tabla
+    echo $html;
+});
+
+//Ejercicio 2
+Route::get('/proveedores/internacionales', function(){
+    // Creamos la lista de proveedores
+    $proveedores = [
+        (object) ['empresa' => 'Bayer', 'pais_origen' => 'Alemania',
+        'medicamento_principal' => 'Vick Vaporup', 'tiempo_entrega_dias' => 10],
+        (object) ['empresa' => 'MediSupply Asia', 'pais_origen' => 'India',
+        'medicamento_principal' => 'Paracetamol', 'tiempo_entrega_dias' => 20],
+        (object) ['empresa' => 'Vijosa', 'pais_origen' => 'El Salvador',
+        'medicamento_principal' => 'Ibuprofeno', 'tiempo_entrega_dias' => 7],
+        (object) ['empresa' => 'GlobalMed USA', 'pais_origen' => 'Estados Unidos',
+        'medicamento_principal' => 'Acetaminofen', 'tiempo_entrega_dias' => 18]
+    ];
+
+    // Creamos la tabla con los registros de los proveedores de forma dinamica
+    $html = '
+        <table border = 1 cellspacing = 0>
+            <thead>
+                <tr>
+                    <th>EMPRESA</th>
+                    <th>PAIS ORIGEN</th>
+                    <th>MEDICAMENTO PRINCIPAL</th>
+                    <th>TIEMPO DE ENTREGA</th>
+                </tr>
+            </thead>
+            <tbody>
+    ';
+    foreach($proveedores as $proveedor) {
+        // Validamos si el tiempo de entrega es critico
+        $tiempo = $proveedor->tiempo_entrega_dias;
+        if ($tiempo > 15) {
+            $tiempo_entrega_final = "$tiempo dias (Demora Critica)";
+        } else {
+            $tiempo_entrega_final = "$tiempo dias";
+        }
+
+        $html .= "
+            <tr>
+                <td>$proveedor->empresa</td>
+                <td>$proveedor->pais_origen</td>
+                <td>$proveedor->medicamento_principal</td>
+                <td>$tiempo_entrega_final</td>
+            </tr>
+        ";
+    }
+    $html .= '
+            </tbody>
+        </table>
+    ';
+    // Pintamos en la ventana del navegador la tabla
+    echo $html;
+});
+
+//Ejercicio 3
+Route::get('/lotes/inventario', function(){
+    // Creamos la lista de lotes de la farmacia
+    $lotes = [
+        (object) ['codigo_lote' => '001', 'nombre_medicamento' => 'Insulina', 
+        'cantidad_cajas' => 40, 'temperatura_requerida_celsius' => 4],
+        (object) ['codigo_lote' => '002', 'nombre_medicamento' => 'Amoxicilina', 
+        'cantidad_cajas' => 100, 'temperatura_requerida_celsius' => 20],
+        (object) ['codigo_lote' => '003', 'nombre_medicamento' => 'Vacuna VPH', 
+        'cantidad_cajas' => 25, 'temperatura_requerida_celsius' => 2],
+        (object) ['codigo_lote' => '004', 'nombre_medicamento' => 'Paracetamol', 
+        'cantidad_cajas' => 80, 'temperatura_requerida_celsius' => 22]
+    ];
+
+    // Creamos la tabla con los registros de los lotes de forma dinamica
+    $html = '
+        <table border = 1 cellspacing = 0>
+            <thead>
+                <tr>
+                    <th>CODIGO LOTE</th>
+                    <th>MEDICAMENTO</th>
+                    <th>CANTIDAD CAJAS</th>
+                    <th>TEMPERATURA REQUERIDA (Celsius)</th>
+                </tr>
+            </thead>
+            <tbody>
+    ';
+    foreach($lotes as $lote) {
+        // Validamos si el medicamento requiere cadena de frio
+        $temperatura = $lote->temperatura_requerida_celsius;
+        if ($temperatura <= 5) {
+            $nombre_formateado = "$lote->nombre_medicamento (Requiere Cadena de Frio)";
+        } else {
+            $nombre_formateado = "$lote->nombre_medicamento";
+        }
+
+        $html .= "
+            <tr>
+                <td>$lote->codigo_lote</td>
+                <td>$nombre_formateado</td>
+                <td>$lote->cantidad_cajas</td>
+                <td>$lote->temperatura_requerida_celsius</td>
+            </tr>
+        ";
+    }
+    $html .= '
+            </tbody>
+        </table>
+    ';
+
+    // Pintamos en la ventana del navegador la tabla
+    echo $html;
+});
+
 require __DIR__.'/settings.php';
